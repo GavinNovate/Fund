@@ -3,13 +3,14 @@ package net.novate.fund.data.entity;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 /**
  * Created by gavin on 18-1-26.
  */
 
 @Entity
-public class Fund {
+public class Fund implements Comparable<Fund> {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -94,5 +95,26 @@ public class Fund {
     @Override
     public String toString() {
         return code + " : " + date + "  " + price + "  " + value + "  " + rate;
+    }
+
+    public int getYear() {
+        return getDigitalDate() / 10000;
+    }
+
+    public int getMonth() {
+        return getDigitalDate() / 100 % 100;
+    }
+
+    public int getDay() {
+        return getDigitalDate() % 100;
+    }
+
+    public int getDigitalDate() {
+        return Integer.parseInt(date.replace("-", ""));
+    }
+
+    @Override
+    public int compareTo(@NonNull Fund target) {
+        return getDigitalDate() - target.getDigitalDate();
     }
 }
